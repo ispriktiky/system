@@ -1,0 +1,179 @@
+/* Gradient Header for Titles */
+.gradient-header {
+    font-size: 2.2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 30px;
+    background: linear-gradient(to right, #5b3a29, #d2b48c);
+
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+  }
+  
+  /* Table Styles */
+  .custom-table {
+    background-color: #fffaf5;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    overflow: hidden;
+  }
+  
+  .custom-table th {
+    background: linear-gradient(180deg,rgb(190, 192, 217), #43465c);
+    color: #fffaf0;
+    text-align: center;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .custom-table td {
+    vertical-align: middle;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  /* Product Image */
+  .product-image {
+    width: 65px;
+    height: 65px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+  }
+  
+  /* Modal Styling */
+  .modal-content {
+    border-radius: 14px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    background-color: #fefdfb;
+  }
+  
+  .modal-header,
+  .modal-footer {
+    background-color: #f1e7dd;
+    border: none;
+  }
+  
+  .modal-title {
+    color: #5b3a29;
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+  /* Buttons */
+  .btn-primary {
+    background-color: #5b3a29;
+    border: none;
+    font-weight: 600;
+  }
+  
+  .btn-primary:hover {
+    background-color: #7a513a;
+  }
+  
+  .btn-danger {
+    background-color: #c94c4c;
+    border: none;
+    font-weight: 600;
+  }
+  
+  .btn-danger:hover {
+    background-color: #b03a3a;
+  }
+  
+  .btn-warning {
+    background-color: #e0a96d;
+    color: #fff;
+    font-weight: 600;
+    border: none;
+  }
+  
+  .btn-warning:hover {
+    background-color: #d49454;
+  }
+  
+  /* Alert */
+  .alert-danger {
+    margin-top: 10px;
+    background-color: #f8d7da;
+    border-left: 5px solid #c94c4c;
+    color: #8e7779;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+  }
+  
+  /* Responsive Fixes */
+  @media (max-width: 768px) {
+    .gradient-header {
+      font-size: 1.8rem;
+    }
+  
+    .custom-table th,
+    .custom-table td {
+      font-size: 13px;
+      padding: 10px;
+    }
+  }
+  
+.modal-content {
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(to bottom, #fefaf6, #f8f4ef);
+    border: 1px solid #e4d5c7;
+  }
+  
+  /* Header & Footer with shoe-inspired theme */
+  .modal-header,
+  .modal-footer {
+    background-color: #f1e7dd;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 14px 14px 0 0;
+  }
+  
+  .modal-header {
+    border-bottom: 1px solid #e6d9cc;
+  }
+  
+  .modal-footer {
+    border-top: 1px solid #e6d9cc;
+    border-radius: 0 0 14px 14px;
+  }
+  
+  /* Modal Title */
+  .modal-title {
+    color: #5b3a29;
+    font-weight: 700;
+    font-size: 20px;
+  }
+  
+
+  .btn-close {
+    filter: invert(40%);
+  }
+  
+  /* Form fields inside modals */
+  .modal-body input.form-control {
+    background-color: #fffdf9;
+    border: 1px solid #d4c2b4;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  .btn-secondary {
+    background-color: #aaa6a2;
+    border: none;
+    font-weight: 600;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #8e8883;
+  }
+  
+  /* Danger and Primary buttons already themed previously */
+  

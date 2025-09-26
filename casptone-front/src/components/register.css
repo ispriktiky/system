@@ -1,0 +1,153 @@
+/* Reset + Fonts */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to right, #ece9e6, #ffffff);
+}
+
+.shoe-register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.shoe-register-card {
+    display: flex;
+    flex-direction: row;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 950px;
+    width: 100%;
+}
+
+.shoe-register-visual {
+    background: url('https://scontent.fcrk3-1.fna.fbcdn.net/v/t39.30808-6/372696572_234256706277485_8687403302626271645_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHXoUFlMZUfENAwy-ifeV7Xz4s7pRa9FPrPizulFr0U-lm92veLoF0XQ5Jrn3z6sFRAm-UUaBY6QE7weG0oE8Kw&_nc_ohc=2EmemOnrDDIQ7kNvwG5QZG0&_nc_oc=AdmTjoTdfhaYyuU4srOZedQPp07rtWGqnBDnL0nhz0YNoPD3MgrJ8jylfMICPdMriL0&_nc_zt=23&_nc_ht=scontent.fcrk3-1.fna&_nc_gid=yUTgSwAo6nk5n906GJgyGA&oh=00_AfFGxBqBBL0sfEedxuxXQ23L4XgO2ewybTj6YtjTtQF2GQ&oe=67FEC122') no-repeat center;
+    background-size: cover;
+    flex: 1.2;
+    padding: 40px;
+    color: rgb(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.shoe-register-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 20px 0 0 20px;
+}
+
+.brand-name, .brand-tagline {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+}
+
+.brand-name {
+    font-size: 36px;
+    font-weight: 800;
+}
+
+.brand-tagline {
+    font-size: 16px;
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Form Section */
+.shoe-register-form-area {
+    flex: 1;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.error-message {
+    background: #ffefef;
+    color: #e74c3c;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.shoe-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.shoe-input {
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    font-size: 14px;
+    transition: border 0.3s;
+}
+
+.shoe-input:focus {
+    border-color: #111;
+    outline: none;
+}
+
+.shoe-button {
+    background-color: #111;
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.shoe-button:hover {
+    background-color: #444;
+}
+
+.signup-text {
+    font-size: 14px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+.signup-link {
+    color: #111;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .shoe-register-card {
+        flex-direction: column;
+    }
+
+    .shoe-register-visual {
+        border-radius: 20px 20px 0 0;
+        padding: 30px;
+        min-height: 250px;
+    }
+
+    .shoe-register-form-area {
+        padding: 30px;
+    }
+}

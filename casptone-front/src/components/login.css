@@ -1,0 +1,185 @@
+/* Reset + Fonts */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: "Merriweather", serif;
+    background: linear-gradient(to bottom right, #d7ccc8, #efebe9);
+}
+
+/* Container */
+.wood-login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(145deg, #f3e5ab, #efebe9); /* Polished woodgrain tones */
+}
+
+/* Login Card */
+.wood-login-card {
+    display: flex;
+    flex-direction: row;
+    background: #fef9f4;
+    border-radius: 18px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    max-width: 1000px;
+    width: 100%;
+    border: 2px solid #a1887f;
+}
+
+/* Left Visual Area */
+.wood-login-visual {
+    background: url('https://scontent.fcrk3-1.fna.fbcdn.net/v/t39.30808-6/372696572_234256706277485_8687403302626271645_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeHXoUFlMZUfENAwy-ifeV7Xz4s7pRa9FPrPizulFr0U-lm92veLoF0XQ5Jrn3z6sFRAm-UUaBY6QE7weG0oE8Kw&_nc_ohc=2EmemOnrDDIQ7kNvwG5QZG0&_nc_oc=AdmTjoTdfhaYyuU4srOZedQPp07rtWGqnBDnL0nhz0YNoPD3MgrJ8jylfMICPdMriL0&_nc_zt=23&_nc_ht=scontent.fcrk3-1.fna&_nc_gid=yUTgSwAo6nk5n906GJgyGA&oh=00_AfFGxBqBBL0sfEedxuxXQ23L4XgO2ewybTj6YtjTtQF2GQ&oe=67FEC122') no-repeat center;
+    background-size: cover;
+    flex: 1.2;
+    position: relative;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.wood-login-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(38, 26, 19, 0.5);
+    border-radius: 18px 0 0 18px;
+    z-index: 1;
+}
+
+.brand-name,
+.brand-tagline {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    text-shadow: 1px 1px 2px #000;
+}
+
+.brand-name {
+    font-size: 36px;
+    font-weight: 800;
+    color: #f5deb3;
+    letter-spacing: 1px;
+}
+
+.brand-tagline {
+    font-size: 16px;
+    margin-top: 10px;
+    font-style: italic;
+    color: #e0c9a6;
+}
+
+/* Form Area */
+.wood-login-form-area {
+    flex: 1;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #fff8f0;
+    background-image: linear-gradient(120deg, #efebe9 25%, #d7ccc8 25%, #d7ccc8 50%, #efebe9 50%, #efebe9 75%, #d7ccc8 75%, #d7ccc8);
+    background-size: 50px 50px;
+    border-left: 1px solid #d7ccc8;
+}
+
+/* Form Text */
+.form-title {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #4e342e;
+}
+
+.form-subtitle {
+    font-size: 14px;
+    color: #6d4c41;
+    margin-bottom: 30px;
+}
+
+/* Form Input */
+.wood-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.wood-input {
+    padding: 14px;
+    border-radius: 6px;
+    border: 1px solid #bcaaa4;
+    background-color: #fffefb;
+    margin-bottom: 18px;
+    font-size: 14px;
+    color: #4e342e;
+    transition: box-shadow 0.2s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.wood-input:focus {
+    border-color: #8d6e63;
+    box-shadow: 0 0 5px rgba(141, 110, 99, 0.5);
+    outline: none;
+}
+
+/* Button */
+.wood-button {
+    background-color: #6d4c41;
+    color: #fff8f0;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.wood-button:hover {
+    background-color: #4e342e;
+}
+
+/* Sign Up Text */
+.signup-text {
+    font-size: 14px;
+    margin-top: 15px;
+    text-align: center;
+    color: #5d4037;
+}
+
+.signup-link {
+    color: #8d6e63;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: underline;
+}
+
+/* Error Message */
+.error-message {
+    background: #fce4ec;
+    color: #c62828;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .wood-login-card {
+        flex-direction: column;
+    }
+
+    .wood-login-visual {
+        border-radius: 18px 18px 0 0;
+        min-height: 250px;
+    }
+
+    .wood-login-form-area {
+        padding: 30px;
+    }
+}
