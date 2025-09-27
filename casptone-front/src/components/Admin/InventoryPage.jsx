@@ -180,9 +180,15 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
   const handleSave = async () => {
     if (!validateForm()) return;
 
+    // Sanitize category to match backend enum
+    const allowedCategories = ["raw", "finished"];
+    const sanitizedCategory = allowedCategories.includes(formData.category)
+      ? formData.category
+      : "raw";
+
     setSaving(true);
     try {
-      await onSave(formData);
+      await onSave({ ...formData, category: sanitizedCategory });
       onHide();
     } catch (error) {
       console.error("Save failed:", error);
@@ -242,8 +248,6 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
                 >
                   <option value="raw">Raw Material</option>
                   <option value="finished">Finished Good</option>
-                  <option value="packaging">Packaging</option>
-                  <option value="other">Other</option>
                 </select>
               </div>
               <div className="col-md-6">
@@ -263,9 +267,9 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
                   type="number"
                   className={`form-control ${errors.quantity ? "is-invalid" : ""}`}
                   value={formData.quantity}
-                  onChange={(e) => handleChange("quantity", Number(e.target.value))}
+                  onChange={(e) => handleChange("quantity", Math.max(0, parseInt(e.target.value || 0, 10)))}
                   min="0"
-                  step="0.01"
+                  step="1"
                 />
                 {errors.quantity && <div className="invalid-feedback">{errors.quantity}</div>}
               </div>
@@ -306,8 +310,9 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
                   type="number"
                   className={`form-control ${errors.lead_time_days ? "is-invalid" : ""}`}
                   value={formData.lead_time_days}
-                  onChange={(e) => handleChange("lead_time_days", Number(e.target.value))}
+                  onChange={(e) => handleChange("lead_time_days", Math.max(0, parseInt(e.target.value || 0, 10)))}
                   min="0"
+                  step="1"
                 />
                 {errors.lead_time_days && <div className="invalid-feedback">{errors.lead_time_days}</div>}
               </div>
@@ -317,9 +322,9 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
                   type="number"
                   className={`form-control ${errors.safety_stock ? "is-invalid" : ""}`}
                   value={formData.safety_stock}
-                  onChange={(e) => handleChange("safety_stock", Number(e.target.value))}
+                  onChange={(e) => handleChange("safety_stock", Math.max(0, parseInt(e.target.value || 0, 10)))}
                   min="0"
-                  step="0.01"
+                  step="1"
                 />
                 {errors.safety_stock && <div className="invalid-feedback">{errors.safety_stock}</div>}
               </div>
@@ -329,9 +334,9 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
                   type="number"
                   className="form-control"
                   value={formData.max_level}
-                  onChange={(e) => handleChange("max_level", Number(e.target.value))}
+                  onChange={(e) => handleChange("max_level", Math.max(0, parseInt(e.target.value || 0, 10)))}
                   min="0"
-                  step="0.01"
+                  step="1"
                 />
               </div>
               <div className="col-md-4">
@@ -340,9 +345,9 @@ const MaterialModal = ({ show, onHide, material, onSave }) => {
                   type="number"
                   className="form-control"
                   value={formData.reorder_point}
-                  onChange={(e) => handleChange("reorder_point", Number(e.target.value))}
+                  onChange={(e) => handleChange("reorder_point", Math.max(0, parseInt(e.target.value || 0, 10)))}
                   min="0"
-                  step="0.01"
+                  step="1"
                 />
               </div>
               <div className="col-12">
@@ -557,6 +562,14 @@ const InventoryPage = () => {
   // Derived analytics per item
   const enriched = useMemo(() => {
     const usageBySku = groupBy(usage || [], (u) => u.sku);
+
+    const safeEtaFromDays = (days) => {
+      if (!Number.isFinite(days) || days < 0) return "-";
+      const millis = Date.now() + Math.floor(days) * 86400000;
+      const d = new Date(millis);
+      return Number.isFinite(d.getTime()) ? d.toISOString().slice(0, 10) : "-";
+    };
+
     const rows = (inventory || []).map((it) => {
       const onHand = Number(it.quantity ?? it.quantity_on_hand ?? 0);
       const lead = Number(it.lead_time_days ?? it.leadTimeDays ?? 0);
@@ -584,10 +597,9 @@ const InventoryPage = () => {
       const target = maxLevel || rop + safety;
       const suggestedOrderQty = onHand <= rop ? Math.max(0, Math.round(target - onHand)) : 0;
 
-      const daysToROP = Math.max(0, Math.ceil((onHand - rop) / Math.max(1e-6, avgDaily)));
-      const etaReorderDate = isFinite(daysToROP)
-        ? new Date(Date.now() + daysToROP * 86400000).toISOString().slice(0, 10)
-        : "-";
+      const rawDaysToROP = (onHand - rop) / (avgDaily > 0 ? avgDaily : Infinity);
+      const daysToROP = Number.isFinite(rawDaysToROP) ? Math.max(0, Math.ceil(rawDaysToROP)) : null;
+      const etaReorderDate = safeEtaFromDays(daysToROP ?? NaN);
 
       return {
         ...it,

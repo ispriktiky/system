@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UsersTableSeeder::class,
             ProductsTableSeeder::class,
-            ProductionSeeder::class, // now uses factory
+            // ProductionSeeder::class, // now uses factory
             InventoryItemsSeeder::class,
         ]);
     }

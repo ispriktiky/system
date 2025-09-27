@@ -20,6 +20,16 @@ const CartTable = () => {
     fetchCartItems();
   }, []);
 
+  // Close checkout modal on Escape for better accessibility
+  useEffect(() => {
+    if (!showCheckout) return;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setShowCheckout(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [showCheckout]);
+
   const fetchCartItems = async () => {
     try {
       const response = await api.get("/cart");
@@ -388,13 +398,6 @@ const CartTable = () => {
               <strong>₱{totalPrice.toLocaleString()}</strong>
             </div>
             
-            <div className="summary-row">
-              <span>Estimated Delivery:</span>
-              <span className="delivery-estimate">3-5 business days</span>
-            </div>
-            
-            <hr className="summary-divider" />
-            
             <div className="summary-row total-row">
               <span>Total Amount:</span>
               <strong className="total-amount">₱{totalPrice.toLocaleString()}</strong>
@@ -416,9 +419,9 @@ const CartTable = () => {
       {/* Enhanced Checkout Modal */}
       {showCheckout && (
         <div className="enhanced-modal-backdrop" onClick={() => setShowCheckout(false)}>
-          <div className="enhanced-modal-card wood-card" onClick={(e) => e.stopPropagation()}>
+          <div className="enhanced-modal-card wood-card" role="dialog" aria-modal="true" aria-labelledby="checkout-title" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>🛠️ Checkout Details</h3>
+              <h3 id="checkout-title">Checkout</h3>
               <button 
                 className="modal-close-btn"
                 onClick={() => setShowCheckout(false)}
@@ -460,7 +463,7 @@ const CartTable = () => {
                   <label className="form-label">Shipping Address *</label>
                   <textarea 
                     className="form-control" 
-                    rows="3" 
+                    rows="2" 
                     value={address} 
                     onChange={(e) => setAddress(e.target.value)} 
                     placeholder="House/Unit, Street, Barangay, City, Province, ZIP" 
@@ -483,7 +486,7 @@ const CartTable = () => {
                 <div className="form-group">
                   <label className="form-label">Payment Method</label>
                   <div className="payment-methods">
-                    <label className={`payment-option ${paymentMethod==='cod'?'selected':''}}`}>
+                    <label className={`payment-option ${paymentMethod==='cod'?'selected':''}`}>
                       <input 
                         type="radio" 
                         name="payment" 
@@ -500,7 +503,7 @@ const CartTable = () => {
                       </div>
                     </label>
                     
-                    <label className={`payment-option ${paymentMethod==='gcash'?'selected':''}}`}>
+                    <label className={`payment-option ${paymentMethod==='gcash'?'selected':''}`}>
                       <input 
                         type="radio" 
                         name="payment" 
@@ -517,7 +520,7 @@ const CartTable = () => {
                       </div>
                     </label>
                     
-                    <label className={`payment-option ${paymentMethod==='maya'?'selected':''}}`}>
+                    <label className={`payment-option ${paymentMethod==='maya'?'selected':''}`}>
                       <input 
                         type="radio" 
                         name="payment" 
@@ -1103,8 +1106,8 @@ const CartTable = () => {
         .enhanced-modal-backdrop {
           position: fixed;
           inset: 0;
-          background: rgba(0, 0, 0, 0.5);
-          backdrop-filter: blur(4px);
+          background: rgba(0, 0, 0, 0.35);
+          backdrop-filter: blur(2px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1118,11 +1121,12 @@ const CartTable = () => {
         }
 
         .enhanced-modal-card {
-          width: 90vw;
-          max-width: 600px;
-          max-height: 90vh;
-          overflow-y: auto;
-          animation: slideUp 0.3s ease-out;
+          width: 96vw;
+          max-width: 900px;
+          background: #ffffff;
+          border: 1px solid #eee;
+          border-radius: 14px;
+          animation: slideUp 0.22s ease-out;
         }
 
         @keyframes slideUp {
@@ -1140,9 +1144,9 @@ const CartTable = () => {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 24px;
-          padding-bottom: 16px;
-          border-bottom: 2px solid var(--wood-panel);
+          margin-bottom: 16px;
+          padding-bottom: 12px;
+          border-bottom: 1px solid #eee;
         }
 
         .modal-header h3 {
@@ -1173,35 +1177,42 @@ const CartTable = () => {
 
         .modal-content {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 32px;
-          margin-bottom: 32px;
+          grid-template-columns: 1fr;
+          gap: 16px;
+          margin-bottom: 16px;
+        }
+
+        @media (min-width: 768px) {
+          .modal-content {
+            grid-template-columns: 1.3fr 0.7fr;
+            gap: 20px;
+            margin-bottom: 16px;
+          }
         }
 
         /* Checkout Summary */
         .checkout-summary {
-          padding: 20px;
+          padding: 12px;
           background: #fafafa;
-          border-radius: 12px;
+          border-radius: 10px;
           border: 1px solid var(--wood-panel);
         }
 
         .checkout-summary h4 {
-          margin: 0 0 16px 0;
+          margin: 0 0 8px 0;
           color: var(--accent-dark);
-          font-size: 1.125rem;
+          font-size: 1rem;
         }
 
         .checkout-items {
-          margin-bottom: 16px;
+          margin-bottom: 8px;
         }
 
         .checkout-item {
           display: flex;
           align-items: center;
-          gap: 12px;
-          padding: 8px 0;
-          border-bottom: 1px solid #e9ecef;
+          gap: 10px;
+          padding: 6px 0;
         }
 
         .checkout-item:last-child {
@@ -1209,8 +1220,8 @@ const CartTable = () => {
         }
 
         .checkout-item-img {
-          width: 40px;
-          height: 40px;
+          width: 32px;
+          height: 32px;
           object-fit: cover;
           border-radius: 6px;
           border: 1px solid #dee2e6;
@@ -1224,7 +1235,7 @@ const CartTable = () => {
         }
 
         .checkout-item-name {
-          font-size: 0.875rem;
+          font-size: 0.85rem;
           font-weight: 500;
           color: var(--ink);
         }
@@ -1235,7 +1246,7 @@ const CartTable = () => {
         }
 
         .checkout-item-price {
-          font-size: 0.875rem;
+          font-size: 0.85rem;
           font-weight: 600;
           color: var(--accent);
         }
@@ -1249,27 +1260,27 @@ const CartTable = () => {
         }
 
         .checkout-total {
-          padding-top: 16px;
-          border-top: 2px solid var(--accent);
+          padding-top: 8px;
+          border-top: 1px solid var(--wood-panel);
           text-align: right;
         }
 
         .checkout-total strong {
           color: var(--accent);
-          font-size: 1.125rem;
+          font-size: 1rem;
         }
 
         /* Checkout Form */
         .checkout-form {
           display: flex;
           flex-direction: column;
-          gap: 20px;
+          gap: 12px;
         }
 
         .form-group {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
 
         .form-label {
@@ -1279,10 +1290,10 @@ const CartTable = () => {
         }
 
         .form-control {
-          padding: 12px 16px;
+          padding: 10px 12px;
           border: 2px solid var(--wood-panel);
           border-radius: 8px;
-          font-size: 1rem;
+          font-size: 0.95rem;
           transition: border-color 0.2s ease;
           background: white;
         }
@@ -1295,19 +1306,22 @@ const CartTable = () => {
         /* Payment Methods */
         .payment-methods {
           display: flex;
-          flex-direction: column;
-          gap: 12px;
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 8px;
         }
 
         .payment-option {
           display: flex;
           align-items: center;
-          padding: 16px;
+          padding: 12px;
           border: 2px solid #e9ecef;
-          border-radius: 12px;
+          border-radius: 10px;
           cursor: pointer;
           transition: all 0.2s ease;
           background: white;
+          flex: 1 1 30%;
+          min-width: 180px;
         }
 
         .payment-option:hover {
@@ -1318,6 +1332,7 @@ const CartTable = () => {
         .payment-option.selected {
           border-color: var(--accent);
           background: rgba(139, 94, 52, 0.05);
+          box-shadow: inset 0 0 0 2px var(--accent);
         }
 
         .payment-option input[type="radio"] {
@@ -1333,7 +1348,7 @@ const CartTable = () => {
         }
 
         .payment-icon {
-          font-size: 1.5rem;
+          font-size: 1.2rem;
         }
 
         .payment-text {
@@ -1345,29 +1360,29 @@ const CartTable = () => {
         .payment-title {
           font-weight: 600;
           color: var(--ink);
+          font-size: 0.95rem;
         }
 
         .payment-desc {
-          font-size: 0.875rem;
+          font-size: 0.8rem;
           color: #666;
         }
 
         .payment-notice {
-          padding: 12px 16px;
-          background: #e3f2fd;
-          border: 1px solid #bbdefb;
-          border-radius: 8px;
-          color: #1565c0;
-          font-size: 0.875rem;
+          padding: 6px 0;
+          background: transparent;
+          border: none;
+          color: #666;
+          font-size: 0.8rem;
         }
 
         /* Modal Footer */
         .modal-footer {
           display: flex;
           justify-content: flex-end;
-          gap: 12px;
-          padding-top: 24px;
-          border-top: 2px solid var(--wood-panel);
+          gap: 8px;
+          padding-top: 12px;
+          border-top: 1px solid #eee;
         }
 
         .btn-secondary-enhanced {

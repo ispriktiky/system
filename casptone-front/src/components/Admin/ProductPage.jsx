@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminProductsTable from "./AdminProductsTable";
-import axios from "axios";
 import api from "../../api/client";
 import { motion } from "framer-motion";
 import { Modal, Button, Form } from "react-bootstrap"; //
@@ -28,18 +27,25 @@ const ProductPage = () => {
   };
 
   const handleAddProduct = async () => {
+    // Basic client-side validation
+    if (!newProduct.name?.trim() || !newProduct.price || !newProduct.stock) {
+      alert("Please fill in Name, Price, and Stock.");
+      return;
+    }
+
     setLoading(true);
-    const token = localStorage.getItem("token");
     try {
-      await axios.post("http://localhost:8000/api/products", newProduct, {
-        headers: { Authorization: `Bearer ${token}` },
+      await api.post("/products", {
+        ...newProduct,
+        price: Number(newProduct.price),
+        stock: Number(newProduct.stock),
       });
-      await api.post("/products", newProduct);
       setShowAddModal(false);
       setNewProduct({ name: "", description: "", price: "", stock: "", image: "" });
       setRefreshProducts((prev) => !prev);
     } catch (error) {
       console.error("Error adding product:", error);
+      alert("Failed to add product. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -82,19 +88,24 @@ const ProductPage = () => {
           <Modal.Body>
             <Form>
               <Form.Group className="mb-3">
-                <Form.Control type="text" name="name" value={newProduct.name} onChange={handleInputChange} placeholder="Product Name" />
+                <Form.Label className="small">Product Name</Form.Label>
+                <Form.Control required type="text" name="name" value={newProduct.name} onChange={handleInputChange} placeholder="e.g., Oak Chair" />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Control type="number" name="price" value={newProduct.price} onChange={handleInputChange} placeholder="Price" />
+                <Form.Label className="small">Price</Form.Label>
+                <Form.Control required min="0" step="0.01" type="number" name="price" value={newProduct.price} onChange={handleInputChange} placeholder="0.00" />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Control as="textarea" rows={2} name="description" value={newProduct.description} onChange={handleInputChange} placeholder="Description" />
+                <Form.Label className="small">Description</Form.Label>
+                <Form.Control as="textarea" rows={2} name="description" value={newProduct.description} onChange={handleInputChange} placeholder="Optional description" />
               </Form.Group>
               <Form.Group className="mb-3">
-                <Form.Control type="number" name="stock" value={newProduct.stock} onChange={handleInputChange} placeholder="Stock" />
+                <Form.Label className="small">Stock</Form.Label>
+                <Form.Control required min="0" step="1" type="number" name="stock" value={newProduct.stock} onChange={handleInputChange} placeholder="0" />
               </Form.Group>
               <Form.Group>
-                <Form.Control type="text" name="image" value={newProduct.image} onChange={handleInputChange} placeholder="Image URL" />
+                <Form.Label className="small">Image URL</Form.Label>
+                <Form.Control type="text" name="image" value={newProduct.image} onChange={handleInputChange} placeholder="https://..." />
               </Form.Group>
             </Form>
           </Modal.Body>

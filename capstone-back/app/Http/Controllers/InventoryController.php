@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Events\InventoryUpdated;
+use App\Services\InventoryForecastService;
 
 class InventoryController extends Controller
 {
@@ -72,13 +73,23 @@ class InventoryController extends Controller
      */
     public function getReorderItems()
     {
-        $reorderItems = InventoryItem::whereRaw('quantity_on_hand <= reorder_point')
-            ->get()
-            ->map(function($item) {
-                $item->reorder_quantity = $item->max_level - $item->quantity_on_hand;
-                $item->days_until_stockout = $this->calculateDaysUntilStockout($item);
+        $svc = app(InventoryForecastService::class);
+        $items = InventoryItem::all();
+
+        $reorderItems = $items->map(function($item) use ($svc) {
+            // Compute dynamic ROP when not explicitly set
+            $rop = $svc->computeReorderPoint($item);
+            $onHand = (int) $item->quantity_on_hand;
+            $suggest = $svc->suggestReplenishmentQty($item);
+
+            if ($onHand <= $rop || $suggest > 0) {
+                $item->reorder_point = $rop;
+                $item->reorder_quantity = $suggest;
+                $item->days_until_stockout = $svc->estimateDaysToDepletion($item) ?? 999;
                 return $item;
-            });
+            }
+            return null;
+        })->filter()->values();
 
         return response()->json($reorderItems);
     }
@@ -95,7 +106,7 @@ class InventoryController extends Controller
             ->get()
             ->groupBy('inventory_item_id')
             ->map(function($usages, $itemId) {
-                $totalUsed = $usages->sum('quantity_used');
+                $totalUsed = $usages->sum('qty_used');
                 $item = $usages->first()->inventoryItem;
                 
                 return [
@@ -106,10 +117,8 @@ class InventoryController extends Controller
                     'remaining_stock' => $item->quantity_on_hand,
                     'usage_details' => $usages->map(function($usage) {
                         return [
-                            'production_id' => $usage->production_id,
-                            'quantity_used' => $usage->quantity_used,
-                            'notes' => $usage->notes,
-                            'created_at' => $usage->created_at
+                            'qty_used' => $usage->qty_used,
+                            'created_at' => optional($usage->created_at)->toDateTimeString(),
                         ];
                     })
                 ];
@@ -139,7 +148,7 @@ class InventoryController extends Controller
                 $item = $usages->first()->inventoryItem;
                 $dailyUsage = $usages->groupBy('date')
                     ->map(function($dayUsages) {
-                        return $dayUsages->sum('quantity_used');
+                        return $dayUsages->sum('qty_used');
                     });
 
                 $avgDailyUsage = $dailyUsage->avg();
@@ -150,7 +159,7 @@ class InventoryController extends Controller
                     'item_name' => $item->name,
                     'sku' => $item->sku,
                     'avg_daily_usage' => round($avgDailyUsage, 2),
-                    'total_usage_period' => $usages->sum('quantity_used'),
+                    'total_usage_period' => $usages->sum('qty_used'),
                     'trend' => $trend,
                     'days_until_stockout' => $this->calculateDaysUntilStockout($item, $avgDailyUsage),
                     'daily_usage_data' => $dailyUsage
@@ -173,7 +182,7 @@ class InventoryController extends Controller
             // Get recent usage data
             $recentUsage = InventoryUsage::where('inventory_item_id', $item->id)
                 ->where('date', '>=', Carbon::now()->subDays(7))
-                ->sum('quantity_used');
+                ->sum('qty_used');
             $dailyUsage = $recentUsage / 7;
         }
 

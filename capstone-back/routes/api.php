@@ -15,6 +15,7 @@ use App\Http\Controllers\OrderTrackingController;
 use App\Http\Controllers\AdminOverviewController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\ProductionTrackingController;
 
 use App\Models\Production;
 use Illuminate\Support\Facades\DB;
@@ -94,12 +95,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/productions/analytics', [ProductionController::class, 'analytics']);
     Route::get('/productions/predictive', [ProductionController::class, 'predictiveAnalytics']);
     Route::get('/productions/daily-summary', [ProductionController::class, 'dailySummary']);
+    Route::get('/productions/dashboard', [ProductionController::class, 'dashboard']);
+    Route::get('/productions/efficiency-report', [ProductionController::class, 'efficiencyReport']);
+    Route::get('/productions/capacity-utilization', [ProductionController::class, 'capacityUtilization']);
+    Route::get('/productions/resource-allocation', [ProductionController::class, 'resourceAllocation']);
+    Route::get('/productions/performance-metrics', [ProductionController::class, 'performanceMetrics']);
     Route::post('/productions', [ProductionController::class, 'store']);
     Route::post('/productions/start', [ProductionController::class, 'startProduction']);
+    Route::post('/productions/batch', [ProductionController::class, 'createBatch']);
     Route::patch('/productions/{id}', [ProductionController::class, 'update']);
+    Route::patch('/productions/{id}/priority', [ProductionController::class, 'updatePriority']);
     Route::patch('/productions/{productionId}/processes/{processId}', [ProductionController::class, 'updateProcess']);
     Route::get('/productions/{id}', [ProductionController::class, 'show']);
+    Route::get('/productions/{id}/timeline', [ProductionController::class, 'getTimeline']);
     Route::delete('/productions/{id}', [ProductionController::class, 'destroy']);
+
+    // Production Tracking Routes
+    Route::group(['prefix' => 'production-tracking'], function () {
+        Route::get('/dashboard', [ProductionTrackingController::class, 'dashboard']);
+        Route::get('/analytics/predictive', [ProductionTrackingController::class, 'predictiveAnalytics']);
+        Route::get('/', [ProductionTrackingController::class, 'index']);
+        Route::post('/', [ProductionTrackingController::class, 'store']);
+        Route::get('/{id}', [ProductionTrackingController::class, 'show']);
+        Route::put('/{id}', [ProductionTrackingController::class, 'update']);
+        Route::post('/{id}/start-stage', [ProductionTrackingController::class, 'startStage']);
+        Route::post('/{id}/complete-stage', [ProductionTrackingController::class, 'completeStage']);
+        Route::post('/{id}/update-progress', [ProductionTrackingController::class, 'updateStageProgress']);
+        Route::post('/reports/generate', [ProductionTrackingController::class, 'generateReport']);
+    });
 
     // ✅ Analytics: Top Users
     Route::get('/top-users', function () {

@@ -1,0 +1,516 @@
+/* Production Reports Styles */
+.production-reports {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.reports-header {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reports-header h1 {
+  color: white;
+}
+
+/* KPI Metrics */
+.kpi-metric {
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  background: #f8f9fa;
+  border-left: 4px solid #007bff;
+  transition: all 0.3s ease;
+}
+
+.kpi-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.kpi-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Metric Small (for capacity section) */
+.metric-small {
+  padding: 15px;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.metric-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Recommendations */
+.recommendations-list {
+  padding: 0;
+  margin: 0;
+}
+
+.recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px 0;
+  border-bottom: 1px solid #eee;
+  transition: all 0.3s ease;
+}
+
+.recommendation-item:last-child {
+  border-bottom: none;
+}
+
+.recommendation-item:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+  border-radius: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.recommendation-icon {
+  margin-right: 15px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.recommendation-text {
+  flex: 1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #495057;
+}
+
+/* Summary Statistics */
+.summary-stat {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.summary-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.stat-content h6 {
+  margin-bottom: 5px;
+  color: #495057;
+  font-weight: 600;
+}
+
+.stat-content p {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+/* Card Enhancements */
+.card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  border-radius: 10px 10px 0 0;
+  padding: 20px;
+}
+
+.card-header h5 {
+  margin-bottom: 0;
+  color: #495057;
+  font-weight: 600;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Tables */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 15px 10px;
+}
+
+.table td {
+  vertical-align: middle;
+  padding: 12px 10px;
+  font-size: 0.9rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Badges */
+.badge {
+  font-weight: 500;
+  font-size: 0.8rem;
+  padding: 6px 12px;
+  border-radius: 20px;
+}
+
+/* Charts Container */
+.recharts-wrapper {
+  border-radius: 8px;
+}
+
+.recharts-cartesian-grid line {
+  stroke: #f0f0f0;
+}
+
+.recharts-text {
+  font-size: 12px;
+  fill: #666;
+}
+
+/* Buttons */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  border: none;
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+  border: none;
+}
+
+.btn-outline-success {
+  border: 2px solid #28a745;
+  color: #28a745;
+}
+
+.btn-outline-success:hover {
+  background: #28a745;
+  color: white;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+/* Alert */
+.alert {
+  border: none;
+  border-radius: 10px;
+  border-left: 4px solid;
+}
+
+.alert-danger {
+  border-left-color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #721c24;
+}
+
+/* Loading States */
+.spinner-border {
+  animation: spinner-border 0.75s linear infinite;
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .production-reports {
+    padding: 10px;
+  }
+  
+  .reports-header {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .reports-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .kpi-value {
+    font-size: 2rem;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .summary-stat {
+    padding: 15px;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .stat-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .kpi-metric {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .kpi-value {
+    font-size: 1.8rem;
+  }
+  
+  .recommendation-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .recommendation-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .table-responsive {
+    font-size: 0.8rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .production-reports {
+    background: white;
+    padding: 0;
+  }
+  
+  .reports-header {
+    background: white !important;
+    color: black !important;
+    box-shadow: none;
+    border-bottom: 2px solid #333;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    break-inside: avoid;
+    margin-bottom: 20px;
+  }
+  
+  .btn {
+    display: none;
+  }
+  
+  .alert {
+    display: none;
+  }
+}
+
+/* Animation Classes */
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Custom Scrollbar */
+.recommendations-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.recommendations-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.recommendations-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.recommendations-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Efficiency Status Colors */
+.efficiency-high {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.efficiency-medium {
+  color: #ffc107;
+  font-weight: 600;
+}
+
+.efficiency-low {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+/* Chart Tooltips */
+.recharts-tooltip-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.recharts-default-tooltip {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Legend Styling */
+.recharts-legend-wrapper {
+  padding-top: 20px;
+}
+
+.recharts-legend-item-text {
+  color: #495057 !important;
+  font-weight: 500 !important;
+}
+
+/* Success State */
+.success-message {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #28a745;
+  text-align: center;
+}
+
+/* Error State */
+.error-message {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+  color: #721c24;
+  padding: 20px;
+  border-radius: 10px;
+  border-left: 4px solid #dc3545;
+  text-align: center;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}

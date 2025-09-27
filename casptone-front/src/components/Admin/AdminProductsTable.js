@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import api from "../../api/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./admin_products.css";
@@ -20,8 +20,13 @@ const AdminProductsTable = () => {
   const [deleteError, setDeleteError] = useState("");
 
   const [showBomModal, setShowBomModal] = useState(false);
-  const [bom, setBom] = useState([]); // [{inventory_item_id, sku, name, qty_per_unit}]
+  const [bom, setBom] = useState([]); // [{inventory_item_id, qty_per_unit}]
   const [materials, setMaterials] = useState([]); // inventory list for picker
+  const [materialQuery, setMaterialQuery] = useState("");
+  const [bomError, setBomError] = useState("");
+  const [showBulkPicker, setShowBulkPicker] = useState(false);
+  const [bulkQuery, setBulkQuery] = useState("");
+  const [bulkSelectedIds, setBulkSelectedIds] = useState([]); // number[]
 
   const token = localStorage.getItem("token");
   const headers = {}; // handled by api client
@@ -38,10 +43,6 @@ const AdminProductsTable = () => {
 
   useEffect(() => {
     fetchProducts();
-    const intervalId = setInterval(() => {
-      fetchProducts();
-    }, 1000);
-    return () => clearInterval(intervalId);
   }, []);
 
   const openBomModal = async (product) => {
@@ -59,11 +60,52 @@ const AdminProductsTable = () => {
     }
   };
 
+  const selectedIds = useMemo(() => new Set(bom.map(r => r.inventory_item_id).filter(Boolean)), [bom]);
+  const filteredMaterials = useMemo(() => {
+    const q = materialQuery.trim().toLowerCase();
+    if (!q) return materials;
+    return materials.filter(m =>
+      String(m.sku || "").toLowerCase().includes(q) ||
+      String(m.name || "").toLowerCase().includes(q)
+    );
+  }, [materials, materialQuery]);
+
   const addBomRow = () => setBom((prev) => [...prev, { inventory_item_id: "", qty_per_unit: 1 }]);
   const removeBomRow = (idx) => setBom((prev) => prev.filter((_, i) => i !== idx));
   const updateBomRow = (idx, field, value) => setBom((prev) => prev.map((r, i) => (i === idx ? { ...r, [field]: value } : r)));
 
+  const toggleBulkId = (id) => {
+    setBulkSelectedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  };
+
+  const bulkAdd = () => {
+    setBom(prev => {
+      const existing = new Set(prev.map(p => p.inventory_item_id).filter(Boolean));
+      const toAdd = bulkSelectedIds.filter(id => !existing.has(id));
+      const rows = toAdd.map(id => ({ inventory_item_id: id, qty_per_unit: 1 }));
+      return [...prev, ...rows];
+    });
+    setShowBulkPicker(false);
+    setBulkSelectedIds([]);
+    setBulkQuery("");
+  };
+
+  const validateBom = () => {
+    const ids = [];
+    for (const row of bom) {
+      if (!row.inventory_item_id) return "Please select a material for every row.";
+      if (!row.qty_per_unit || row.qty_per_unit <= 0) return "Quantity must be at least 1 for all rows.";
+      ids.push(row.inventory_item_id);
+    }
+    const hasDup = ids.some((id, idx) => ids.indexOf(id) !== idx);
+    if (hasDup) return "Duplicate materials found. Each material can only appear once.";
+    return "";
+  };
+
   const saveBom = async () => {
+    const err = validateBom();
+    setBomError(err);
+    if (err) return;
     try {
       await api.post(`/products/${selectedProduct.id}/materials`, { items: bom });
       setShowBomModal(false);
@@ -144,6 +186,10 @@ const AdminProductsTable = () => {
 
   return (
     <div className="products-container">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <h5 className="mb-0">Products</h5>
+        <button className="btn btn-outline-secondary btn-sm" onClick={fetchProducts}>Refresh</button>
+      </div>
       {loading ? (
         <p>Loading products...</p>
       ) : (
@@ -319,7 +365,58 @@ const AdminProductsTable = () => {
                 <button type="button" className="btn-close" onClick={() => setShowBomModal(false)}></button>
               </div>
               <div className="modal-body">
-                <table className="table table-sm">
+                {/* Bulk picker toggle */}
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <div className="input-group input-group-sm" style={{maxWidth: 320}}>
+                    <span className="input-group-text">Search materials</span>
+                    <input className="form-control" value={materialQuery} onChange={(e)=>setMaterialQuery(e.target.value)} placeholder="Search by SKU or name" />
+                  </div>
+                  <div className="d-flex gap-2">
+                    <button className="btn btn-outline-secondary btn-sm" onClick={()=>setShowBulkPicker(s=>!s)}>
+                      {showBulkPicker ? "Close Bulk Add" : "Bulk Add Materials"}
+                    </button>
+                    <button className="btn btn-outline-primary btn-sm" onClick={exportBom}>Export CSV</button>
+                    <label className="btn btn-outline-success btn-sm mb-0">
+                      Import CSV
+                      <input type="file" accept=".csv" hidden onChange={(e) => e.target.files?.[0] && importBom(e.target.files[0])} />
+                    </label>
+                  </div>
+                </div>
+
+                {showBulkPicker && (
+                  <div className="border rounded p-2 mb-3" style={{maxHeight: 260, overflowY: 'auto'}}>
+                    <div className="d-flex justify-content-between align-items-center mb-2">
+                      <strong>Select multiple materials</strong>
+                      <div className="input-group input-group-sm" style={{maxWidth: 280}}>
+                        <span className="input-group-text">Filter</span>
+                        <input className="form-control" value={bulkQuery} onChange={(e)=>setBulkQuery(e.target.value)} placeholder="Type to filter..." />
+                      </div>
+                    </div>
+                    {materials
+                      .filter(m => !selectedIds.has(m.id))
+                      .filter(m => {
+                        const q = bulkQuery.trim().toLowerCase();
+                        if (!q) return true;
+                        return String(m.sku||"").toLowerCase().includes(q) || String(m.name||"").toLowerCase().includes(q);
+                      })
+                      .map(m => (
+                        <div key={m.id} className="form-check">
+                          <input className="form-check-input" type="checkbox" id={`m-${m.id}`} checked={bulkSelectedIds.includes(m.id)} onChange={()=>toggleBulkId(m.id)} />
+                          <label className="form-check-label" htmlFor={`m-${m.id}`}>
+                            {m.sku} — {m.name}
+                          </label>
+                        </div>
+                      ))}
+                    <div className="mt-2 d-flex gap-2">
+                      <button className="btn btn-sm btn-primary" onClick={bulkAdd} disabled={bulkSelectedIds.length===0}>Add Selected</button>
+                      <button className="btn btn-sm btn-outline-secondary" onClick={()=>{setShowBulkPicker(false); setBulkSelectedIds([]);}}>Cancel</button>
+                    </div>
+                  </div>
+                )}
+
+                {bomError && <div className="alert alert-warning py-2">{bomError}</div>}
+
+                <table className="table table-sm align-middle">
                   <thead>
                     <tr>
                       <th>Material</th>
@@ -334,11 +431,20 @@ const AdminProductsTable = () => {
                           <select
                             className="form-select form-select-sm"
                             value={row.inventory_item_id}
-                            onChange={(e) => updateBomRow(idx, 'inventory_item_id', Number(e.target.value))}
+                            onChange={(e) => {
+                              const val = Number(e.target.value);
+                              if (val && selectedIds.has(val) && val !== row.inventory_item_id) {
+                                alert("This material is already selected.");
+                                return;
+                              }
+                              updateBomRow(idx, 'inventory_item_id', val);
+                            }}
                           >
                             <option value="">Select material</option>
-                            {materials.map((m) => (
-                              <option key={m.id} value={m.id}>{m.sku} — {m.name}</option>
+                            {filteredMaterials.map((m) => (
+                              <option key={m.id} value={m.id} disabled={selectedIds.has(m.id) && m.id !== row.inventory_item_id}>
+                                {m.sku} — {m.name}
+                              </option>
                             ))}
                           </select>
                         </td>
@@ -355,16 +461,11 @@ const AdminProductsTable = () => {
                 </table>
                 <div className="d-flex gap-2">
                   <button className="btn btn-outline-secondary btn-sm" onClick={addBomRow}>+ Add Material</button>
-                  <button className="btn btn-outline-primary btn-sm" onClick={exportBom}>Export CSV</button>
-                  <label className="btn btn-outline-success btn-sm mb-0">
-                    Import CSV
-                    <input type="file" accept=".csv" hidden onChange={(e) => e.target.files?.[0] && importBom(e.target.files[0])} />
-                  </label>
                 </div>
               </div>
               <div className="modal-footer">
                 <button className="btn btn-secondary" onClick={() => setShowBomModal(false)}>Close</button>
-                <button className="btn btn-primary" onClick={saveBom}>Save</button>
+                <button className="btn btn-primary" onClick={saveBom} disabled={!!validateBom()}>Save</button>
               </div>
             </div>
           </div>

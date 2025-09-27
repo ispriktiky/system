@@ -15,7 +15,16 @@ class UsageController extends Controller
     public function index(Request $request) {
         $days = $request->query('days', 90);
         $since = now()->subDays($days);
-        $usage = InventoryUsage::where('date','>=',$since)->get();
+        $usage = InventoryUsage::with('inventoryItem:id,sku')
+            ->where('date','>=',$since)
+            ->get()
+            ->map(function($u){
+                return [
+                    'sku' => optional($u->inventoryItem)->sku,
+                    'date' => optional($u->date)->format('Y-m-d') ?? (string) $u->date,
+                    'qtyUsed' => (int) $u->qty_used,
+                ];
+            });
         return response()->json($usage);
     }
 

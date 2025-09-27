@@ -1,0 +1,511 @@
+/* Enhanced Production Dashboard Styles */
+.production-dashboard {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.dashboard-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+  color: white;
+}
+
+/* Card Enhancements */
+.card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  border-radius: 10px 10px 0 0;
+}
+
+/* KPI Cards */
+.card-icon {
+  opacity: 0.8;
+}
+
+.metric-card {
+  padding: 15px;
+  text-align: center;
+}
+
+.metric-card h4 {
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+/* Production Cards */
+.production-card {
+  transition: all 0.3s ease;
+}
+
+.production-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Process Timeline */
+.process-timeline {
+  position: relative;
+  padding: 15px 0;
+}
+
+.process-step {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.process-step:last-child {
+  margin-bottom: 0;
+}
+
+.process-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 15px;
+  position: relative;
+}
+
+.process-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #dee2e6;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.process-line {
+  width: 2px;
+  height: 30px;
+  background-color: #dee2e6;
+  margin: 5px 0;
+}
+
+.process-content {
+  flex: 1;
+}
+
+.process-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.process-details {
+  font-size: 0.8rem;
+}
+
+/* Process Status States */
+.process-step.completed .process-dot {
+  background-color: #28a745;
+  box-shadow: 0 0 0 2px #28a745;
+}
+
+.process-step.completed .process-line {
+  background-color: #28a745;
+}
+
+.process-step.in_progress .process-dot {
+  background-color: #007bff;
+  box-shadow: 0 0 0 2px #007bff;
+  animation: pulse 2s infinite;
+}
+
+.process-step.in_progress .process-line {
+  background-color: #007bff;
+}
+
+.process-step.delayed .process-dot {
+  background-color: #dc3545;
+  box-shadow: 0 0 0 2px #dc3545;
+}
+
+.process-step.delayed .process-line {
+  background-color: #dc3545;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Stage Indicator */
+.stage-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Timeline Modal */
+.production-timeline-detail {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.timeline-header {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.timeline-item {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #dee2e6;
+  transition: all 0.3s ease;
+}
+
+.timeline-item.completed {
+  border-left-color: #28a745;
+  background-color: #d4edda;
+}
+
+.timeline-item.in_progress {
+  border-left-color: #007bff;
+  background-color: #d1ecf1;
+}
+
+.timeline-item.delayed {
+  border-left-color: #dc3545;
+  background-color: #f8d7da;
+}
+
+.timeline-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #dee2e6;
+  margin-right: 15px;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+
+.timeline-item.completed .timeline-marker {
+  background-color: #28a745;
+}
+
+.timeline-item.in_progress .timeline-marker {
+  background-color: #007bff;
+}
+
+.timeline-item.delayed .timeline-marker {
+  background-color: #dc3545;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+/* Tab Enhancements */
+.nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  color: #6c757d;
+  font-weight: 500;
+  padding: 12px 20px;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: transparent;
+  color: #495057;
+  background-color: #f8f9fa;
+}
+
+.nav-tabs .nav-link.active {
+  color: #007bff;
+  background-color: transparent;
+  border-bottom: 2px solid #007bff;
+}
+
+/* Progress Bar Enhancements */
+.progress {
+  background-color: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  transition: width 0.6s ease;
+  border-radius: 10px;
+}
+
+/* Filter Section */
+.card .form-control, 
+.card .form-select {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.card .form-control:focus, 
+.card .form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Badge Enhancements */
+.badge {
+  font-weight: 500;
+  border-radius: 20px;
+  padding: 5px 10px;
+}
+
+/* Button Enhancements */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* Table Enhancements */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Alert Enhancements */
+.alert {
+  border: none;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.alert-warning {
+  border-left-color: #ffc107;
+  background-color: rgba(255, 193, 7, 0.1);
+}
+
+.alert-info {
+  border-left-color: #17a2b8;
+  background-color: rgba(23, 162, 184, 0.1);
+}
+
+.alert-secondary {
+  border-left-color: #6c757d;
+  background-color: rgba(108, 117, 125, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .production-card {
+    margin-bottom: 20px;
+  }
+  
+  .process-timeline {
+    padding: 10px 0;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .nav-tabs .nav-link {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .production-dashboard {
+    padding: 10px;
+  }
+  
+  .btn-sm {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+  
+  .metric-card h4 {
+    font-size: 1.2rem;
+  }
+  
+  .process-step {
+    margin-bottom: 10px;
+  }
+}
+
+/* Loading States */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  z-index: 10;
+}
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Custom Scrollbar */
+.production-timeline-detail::-webkit-scrollbar {
+  width: 6px;
+}
+
+.production-timeline-detail::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.production-timeline-detail::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 10px;
+}
+
+.production-timeline-detail::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Priority Indicators */
+.priority-urgent {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.priority-high {
+  border-left: 4px solid #ffc107 !important;
+}
+
+.priority-medium {
+  border-left: 4px solid #17a2b8 !important;
+}
+
+.priority-low {
+  border-left: 4px solid #6c757d !important;
+}
+
+/* Charts Container */
+.chart-container {
+  position: relative;
+  height: 300px;
+  padding: 10px;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.empty-state h5 {
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+.empty-state p {
+  margin-bottom: 20px;
+}
+
+/* Success States */
+.success-state {
+  text-align: center;
+  padding: 30px 20px;
+  color: #28a745;
+}
+
+.success-state i {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+/* Duration Info */
+.duration-info {
+  background-color: rgba(0, 123, 255, 0.05);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+}

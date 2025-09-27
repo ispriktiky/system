@@ -25,7 +25,14 @@ const toCSV = (rows, columns) => {
   return [header, ...lines].join("\n");
 };
 
-const STAGES = ["Design", "Preparation", "Cutting", "Assembly", "Finishing", "Quality Control"];
+const STAGES = [
+  "Material Preparation",
+  "Cutting & Shaping",
+  "Assembly",
+  "Sanding & Surface Preparation",
+  "Finishing",
+  "Quality Check & Packaging"
+];
 const COLORS = ["#f39c12", "#2980b9", "#8e44ad", "#27ae60"];
 
 const authHeaders = () => ({});

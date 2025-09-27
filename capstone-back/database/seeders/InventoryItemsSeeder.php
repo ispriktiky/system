@@ -110,22 +110,54 @@ class InventoryItemsSeeder extends Seeder
             ],
         ];
 
+        // Seed sensible default stocks so items display with on-hand quantities
+        $defaults = [
+            'quantity_on_hand' => 100,
+            'safety_stock' => 10,
+            'reorder_point' => 20,
+            'max_level' => 200,
+            'lead_time_days' => 7,
+            'location' => 'Main Warehouse',
+        ];
+
+        // Assign specific quantities for some items
+        $qtyMap = [
+            'PW-1x4x8' => 120,
+            'PLY-4.2-4x8' => 80,
+            'ACR-1.5-4x8' => 60,
+            'PN-F30' => 500,
+            'BS-1.5' => 400,
+            'STKW-250' => 75,
+            'GRP-4-120' => 150,
+            'STK-24-W' => 200,
+            'STK-24-B' => 180,
+            'TFT-24' => 90,
+            'TAPE-2-300' => 300,
+            'FRAG-2-300' => 220,
+            'BWRAP-40-100' => 50,
+            'INS-8-40-100' => 45,
+        ];
+
         foreach ($items as $item) {
+            $onHand = $qtyMap[$item['sku']] ?? $defaults['quantity_on_hand'];
+            $reorderPoint = max(5, (int) round($onHand * 0.2)); // 20% of on-hand as ROP
+            $maxLevel = max($onHand, (int) round($onHand * 1.8));
+
             InventoryItem::updateOrCreate(
                 ['sku' => $item['sku']],
                 [
                     'name' => $item['name'],
                     'category' => $item['category'],
-                    'location' => null,
+                    'location' => $defaults['location'],
                     'unit' => $item['unit'] ?? null,
                     'unit_cost' => null,
                     'supplier' => null,
                     'description' => $item['description'] ?? null,
-                    'quantity_on_hand' => 0,
-                    'safety_stock' => 0,
-                    'reorder_point' => 0,
-                    'max_level' => 0,
-                    'lead_time_days' => 0,
+                    'quantity_on_hand' => $onHand,
+                    'safety_stock' => max(5, (int) round($onHand * 0.1)),
+                    'reorder_point' => $reorderPoint,
+                    'max_level' => $maxLevel,
+                    'lead_time_days' => $defaults['lead_time_days'],
                 ]
             );
         }
